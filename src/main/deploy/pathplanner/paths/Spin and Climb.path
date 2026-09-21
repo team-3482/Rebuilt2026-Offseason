@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.5467177871919024,
+        "y": 3.7452625027508804
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.97213662136463,
+        "y": 3.7452625027508804
+      },
+      "isLocked": false,
+      "linkedName": "Climb aiming at Hub"
+    },
+    {
+      "anchor": {
+        "x": 3.115,
+        "y": 3.745
+      },
+      "prevControl": {
+        "x": 2.663101941097679,
+        "y": 3.745
+      },
+      "nextControl": {
+        "x": 3.8495483341563936,
+        "y": 3.745
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.0114122681883024,
+        "y": 3.7452625027508804
+      },
+      "prevControl": {
+        "x": 2.5773731939300326,
+        "y": 3.7452625027508804
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Middle Climb"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.7882382454128427,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "2. Climb",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 5.6064043383105995
+  },
+  "useDefaultConstraints": true
+}
