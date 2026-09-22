@@ -6,6 +6,7 @@ package frc.robot.swerve;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -37,15 +38,16 @@ public class LookAtPositionCommand extends Command {
         Pose2d pose = SwerveSubsystem.getInstance().getState().Pose;
         this.targetAngle = normalizeAngle(Math.atan2(this.target.getY() - pose.getY(), this.target.getX() - pose.getX()));
         SwerveSubsystem.getInstance().setTargetAngle(this.targetAngle);
+        turnPID.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     @Override
     public void execute() {
         Pose2d pose = SwerveSubsystem.getInstance().getState().Pose;
-        double currentAngle = pose.getRotation().getRadians();
-        double error = targetAngle - currentAngle;
+        double currentAngle = normalizeAngle(pose.getRotation().getRadians());
 
-        double output = turnPID.calculate(error);
+        double output = turnPID.calculate(currentAngle, targetAngle);
+
         System.out.println(output);
         SwerveSubsystem.getInstance().setControl(
             drive.withSpeeds(new ChassisSpeeds(0, 0, output))
@@ -71,14 +73,16 @@ public class LookAtPositionCommand extends Command {
     }
     
     /**
-     * Normalizes an angle to the range [0, 2pi].
+     * Normalizes an angle to the range [-pi, pi).
      * @param angle - Angle as radians
      * @return Normalized angle in radians
      */
     private double normalizeAngle(double angle) {
         double result = angle % (2 * Math.PI);
-        if (result < 0) {
+        if (result < -Math.PI) {
             result += 2 * Math.PI;
+        } else if (result >= Math.PI) {
+            result -= 2 * Math.PI;
         }
         return result;
     }

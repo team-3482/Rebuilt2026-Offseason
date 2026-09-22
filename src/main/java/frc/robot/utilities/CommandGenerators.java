@@ -53,7 +53,7 @@ public class CommandGenerators {
             new RevShooterCommand(target)
         );
 
-        CommandScheduler.getInstance().schedule(parallelCommand);
+        // CommandScheduler.getInstance().schedule(parallelCommand);
 
         if (distance.gt(CalculationConstants.MAX_SHOOTING_DISTANCE)
             && distance.lt(CalculationConstants.MIN_SHOOTING_DISTANCE)) {
@@ -104,20 +104,14 @@ public class CommandGenerators {
      * @return The command.
      */
     public static Command PrepareFerry() {
-        return Commands.runEnd(
-            () -> {
-                boolean redAlliance = DriverStation.getAlliance().orElse(Alliance.Blue).equals(DriverStation.Alliance.Red);
-                boolean topHalf = SwerveSubsystem.getInstance().getState().Pose.getY() > Positions.HALF_FIELD_Y;
+        boolean redAlliance = DriverStation.getAlliance().orElse(Alliance.Blue).equals(DriverStation.Alliance.Red);
+        boolean topHalf = SwerveSubsystem.getInstance().getState().Pose.getY() > Positions.HALF_FIELD_Y;
 
-                Pose2d position = redAlliance
-                    ? (topHalf ? Positions.RED_TOP_FERRY : Positions.RED_BOTTOM_FERRY)
-                    : (topHalf ? Positions.BLUE_TOP_FERRY : Positions.BLUE_BOTTOM_FERRY);
+        Pose2d position = redAlliance
+            ? (topHalf ? Positions.RED_TOP_FERRY : Positions.RED_BOTTOM_FERRY)
+            : (topHalf ? Positions.BLUE_TOP_FERRY : Positions.BLUE_BOTTOM_FERRY);
 
-                scheduledPrepareFerryCommand = AimAndRevShooter(position, false);
-            },
-            () -> {
-                scheduledPrepareFerryCommand.cancel();
-            });
+        return AimAndRevShooter(position, false);
     }
 
     /**
@@ -125,14 +119,12 @@ public class CommandGenerators {
      * @return The command.
      */
     public static Command PrepareHub() {
-        return Commands.runEnd(
-            () -> {
-                boolean redAlliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue).equals(DriverStation.Alliance.Red);
-                Pose2d target = redAlliance ? Positions.RED_HUB : Positions.BLUE_HUB;
-                scheduledPrepareHubCommand = AimAndRevShooter(target, true);
-            },
-            () -> {
-                scheduledPrepareHubCommand.cancel();
-            });
+        boolean redAlliance = DriverStation.getAlliance()
+            .orElse(DriverStation.Alliance.Blue)
+            .equals(DriverStation.Alliance.Red);
+        Pose2d target = redAlliance 
+            ? Positions.RED_HUB 
+            : Positions.BLUE_HUB;
+        return AimAndRevShooter(target, true);
     }
 }
