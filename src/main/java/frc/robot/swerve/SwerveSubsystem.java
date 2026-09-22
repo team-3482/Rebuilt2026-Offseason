@@ -10,7 +10,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,7 +18,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -28,7 +26,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.constants.Constants.AutoAngleConstants;
 import frc.robot.constants.TunerConstants;
 
 import java.util.function.Supplier;
@@ -69,10 +66,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     /* Swerve requests to apply during SysId characterization */
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
-    private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
-    private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
-
-    private Angle targetAngle = Degrees.of(0);
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -85,49 +78,6 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         ),
         new SysIdRoutine.Mechanism(
             output -> setControl(m_translationCharacterization.withVolts(output)),
-            null,
-            this
-        )
-    );
-
-    /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
-    private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
-            Volts.of(7), // Use dynamic voltage of 7 V
-            null,        // Use default timeout (10 s)
-            // Log state with SignalLogger class
-            state -> SignalLogger.writeString("SysIdSteer_State", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            volts -> setControl(m_steerCharacterization.withVolts(volts)),
-            null,
-            this
-        )
-    );
-
-    /*
-     * SysId routine for characterizing rotation.
-     * This is used to find PID gains for the FieldCentricFacingAngle HeadingController.
-     * See the documentation of SwerveRequest.SysIdSwerveRotation for info on importing the log to SysId.
-     */
-    private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            /* This is in radians per second², but SysId only supports "volts per second" */
-            Volts.of(Math.PI / 6).per(Second),
-            /* This is in radians per second, but SysId only supports "volts" */
-            Volts.of(Math.PI),
-            null, // Use default timeout (10 s)
-            // Log state with SignalLogger class
-            state -> SignalLogger.writeString("SysIdRotation_State", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            output -> {
-                /* output is actually radians per second, but SysId only supports "volts" */
-                setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
-                /* also log the requested output for SysId */
-                SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
-            },
             null,
             this
         )
@@ -315,35 +265,23 @@ public class SwerveSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
         return Meters.of(distance);
     }
 
-    /**
-     * Set the target angle for telemetry purposes.
-     * @param angle The new angle.
-     */
-    public void setTargetAngle(Angle angle) {
-        targetAngle = angle;
-
-        if(angle.in(Degrees) > 180) {
-            targetAngle = targetAngle.minus(Degrees.of(180));
-            targetAngle = Degrees.of(-180).plus(targetAngle);
-        } else if (angle.in(Degrees) < -180) {
-            targetAngle = targetAngle.plus(Degrees.of(180));
-            targetAngle = Degrees.of(180).plus(targetAngle);
-        }
+    // Target angle for the robot to rotate to, in radians
+    // Putting the var here because it is offseason.
+    private double targetAngle;
+    public void setTargetAngle(double angle) {
+        this.targetAngle = angle;
+    }
+    public double getTargetAngle() {
+        return this.targetAngle;
     }
 
-    /**
-     * Get the target angle for telemetry purposes.
-     * @return The target angle.
-     */
-    public Angle getTargetAngle() {
-        return targetAngle;
+    // Is within tolerance
+    // Putting the var here because it is offseason.
+    private boolean angleWithinToleranceToTarget;
+    public void setAngleWithinToleranceToTarget(boolean withinTolerance) {
+        this.angleWithinToleranceToTarget = withinTolerance;
     }
-
-    public boolean angleWithinToleranceToTarget() {
-        return MathUtil.isNear(
-            targetAngle.in(Degrees),
-            getState().Pose.getRotation().getDegrees(),
-            AutoAngleConstants.TOLERANCE.in(Degrees)
-        );
+    public boolean isAngleWithinToleranceToTarget() {
+        return this.angleWithinToleranceToTarget;
     }
 }

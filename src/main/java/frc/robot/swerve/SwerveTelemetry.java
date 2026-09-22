@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import frc.robot.constants.Constants.AutoAngleConstants;
+
 import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.Degrees;
@@ -128,11 +130,11 @@ public class SwerveTelemetry {
         SmartDashboard.putNumber("Robot Angle", angle);
         Logger.recordOutput("DriveState/Angle", angle);
 
-        double targetAngle = SwerveSubsystem.getInstance().getTargetAngle().in(Degrees);
-        Logger.recordOutput("DriveState/TargetAngle", targetAngle);
-        SmartDashboard.putNumber("DriveState/TargetAngle", targetAngle);
+        double targetAngle = SwerveSubsystem.getInstance().getTargetAngle();
+        Logger.recordOutput("DriveState/TargetAngle", Math.toDegrees(targetAngle));
+        SmartDashboard.putNumber("DriveState/TargetAngle", Math.toDegrees(targetAngle));
 
-        boolean angleWithinToleranceToTarget = SwerveSubsystem.getInstance().angleWithinToleranceToTarget();
+        boolean angleWithinToleranceToTarget = SwerveSubsystem.getInstance().isAngleWithinToleranceToTarget();
         Logger.recordOutput("DriveState/AngleWithinToleranceToTarget", angleWithinToleranceToTarget);
         SmartDashboard.putBoolean("DriveState/AngleWithinToleranceToTarget", angleWithinToleranceToTarget);
     }

@@ -29,7 +29,7 @@ public class FeedShooterCommand extends Command {
         if (
             !doChecks
             || (ShooterSubsystem.getInstance().isShooterVelocityWithinTolerance()
-            && SwerveSubsystem.getInstance().angleWithinToleranceToTarget())
+            && SwerveSubsystem.getInstance().isAngleWithinToleranceToTarget())
         ) {
             ShooterSubsystem.getInstance().setSterilizerSpeed(ShooterConstants.STERILIZER_SPEED * direction);
             ShooterSubsystem.getInstance().setFeederSpeed(ShooterConstants.FEEDER_SPEED * direction);
