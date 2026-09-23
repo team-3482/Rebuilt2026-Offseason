@@ -6,7 +6,6 @@ package frc.robot.swerve;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -48,7 +47,6 @@ public class LookAtPositionCommand extends Command {
 
         double output = turnPID.calculate(currentAngle, targetAngle);
 
-        System.out.println(output);
         SwerveSubsystem.getInstance().setControl(
             drive.withSpeeds(new ChassisSpeeds(0, 0, output))
         );
