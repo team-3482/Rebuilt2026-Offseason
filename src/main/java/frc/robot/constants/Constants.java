@@ -182,15 +182,17 @@ public class Constants {
         public static final Distance WHEEL_DIAMETER = Inches.of(3.965);
         /** Fuel ball diameter */
         public static final Distance FUEL_DIAMETER = Inches.of(5.91);
-        /** Diameter of the hood (if it was a full circle) */
+        /** Diameter of the hood (if it was a full circle) TODO: Is this the outside or the inside?*/
         public static final Distance RING_DIAMETER = Inches.of(15.155);
+        /** Compressed fuel diameter/ Shooter Width TODO: Measure the actual diameter of the compressed fuel/width of shooter*/
+        public static final Distance SHOOTER_WIDTH = Inches.of(3.5);
 
         /** Ratio of the diameter of the Ring to the diameter of the Wheel */
         public static final double GEAR_RATIO = RING_DIAMETER.in(Inches) / WHEEL_DIAMETER.in(Inches) + 1; // 4.822
         /** Ratio for converting Wheel angular velocity to Fuel angular velocity */
         public static final double WHEEL_TO_FUEL_ANGULAR_VELOCITY_RATIO = 1 / GEAR_RATIO; // 0.2074
-        /** Radius of the path that the Fuel takes */
-        public static final Distance CARRIER_RADIUS = Inches.of((FUEL_DIAMETER.in(Inches) / 2) + (WHEEL_DIAMETER.in(Inches) / 2)); // 0.1254 m
+        /** Radius of the path that the Fuel takes TODO: Check if ring diameter is the outside or inside - or +*/
+        public static final Distance CARRIER_RADIUS = Inches.of((WHEEL_DIAMETER.in(Inches) / 2) - (SHOOTER_WIDTH.in(Inches) / 2)); // meter length
         /** Ratio for converting Motor angular velocity to Fuel linear velocity */
         public static final double SHOOTER_ANGULAR_TO_FUEL_LINEAR_VELOCITY_RATIO = WHEEL_TO_FUEL_ANGULAR_VELOCITY_RATIO * CARRIER_RADIUS.in(Meters); // 0.026
         /** Ratio for converting Fuel linear velocity to Motor angular velocity */
@@ -221,6 +223,12 @@ public class Constants {
 
         /** Height of the Hub */
         public static final Distance HUB_HEIGHT = Feet.of(6);
+
+        /** Height of the  Release point (TODO: this is a placeholder value, we need to measure the actual height of the release point on the robot) */
+        public static final Distance RELEASE_HEIGHT = Inches.of(29);
+
+        /** Angle of the  Release point (TODO: this is a placeholder value, we need to measure the actual angle of the release point on the robot) */
+        public static final Angle SHOOTER_ANGLE = Degrees.of(45);
     }
 
     /** Constants for climb */

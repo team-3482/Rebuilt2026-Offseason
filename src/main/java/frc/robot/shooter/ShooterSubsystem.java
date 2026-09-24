@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -162,6 +163,59 @@ public class ShooterSubsystem extends SubsystemBase {
 
         return MetersPerSecond.of(v);
     }
+
+    /**
+     * Calculate the desired fuel velocity based on distance from the target
+     * @param distance distance from the target
+     * @param angle the angle of the shooter
+     * @return the desired velocity of the fuel
+     */
+    public static double calculateExitVelocity(
+            Distance distanceX,
+            Angle angle) {
+
+        double angleInRadians = angle.in(Radians);
+        double xInMeters = distanceX.in(Meters);
+
+        double denominator =
+                2.0
+                * Math.pow(Math.cos(angleInRadians), 2)
+                * (xInMeters * Math.tan(angleInRadians) 
+                - (CalculationConstants.HUB_HEIGHT.in(Meters) - CalculationConstants.RELEASE_HEIGHT.in(Meters)));
+
+        if (denominator <= 0) {
+            throw new IllegalArgumentException(
+            "Target cannot be reached with this angle and position."
+            );
+        }
+
+        return Math.sqrt((CalculationConstants.GRAV.in(MetersPerSecondPerSecond) * xInMeters * xInMeters) / denominator);
+    }
+
+    /**
+     * Calculate the desired fuel velocity based on distance from the target
+     * @param distance distance from the target
+     * @return the desired velocity of the fuel
+     */
+    public static double calculateExitVelocity(Distance distance) {
+        return calculateExitVelocity(distance, CalculationConstants.SHOOTER_ANGLE);
+    }
+
+
+    /**
+     * Returns the target angular velocity for the shooter motors given the distance from a target.
+     * @param distance the distance from the target.
+     * @return The desired/target shooter angular velocity.
+     */
+    // public AngularVelocity calculateShooterAngularVelocity(Distance distance) {
+    //     double linearVelocity = calculateFuelLinearVelocity(distance).in(MetersPerSecond);
+    //     Logger.recordOutput("Shooter/FuelLinearVelocity", linearVelocity);
+
+    //     return RadiansPerSecond.of(
+    //         (linearVelocity * 2)
+    //         / CalculationConstants.WHEEL_DIAMETER.in(Meters)
+    //     );
+    // }
 
     /**
      * Returns the target angular velocity for the shooter motors given the distance from a target.
