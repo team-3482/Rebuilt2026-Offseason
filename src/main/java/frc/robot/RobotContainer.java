@@ -231,8 +231,8 @@ public class RobotContainer {
 
         // Intake
         NamedCommands.registerCommand("Intake", new IntakeCommand());
-        NamedCommands.registerCommand("MoveRackAndPinionOut", new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT));
-        NamedCommands.registerCommand("MoveRackAndPinionIn", new PivotCommand(IntakeConstants.RESTING_VERTICAL_ANGLE));
+        NamedCommands.registerCommand("PivotToIntake", new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT));
+        NamedCommands.registerCommand("PivotToRest", new PivotCommand(IntakeConstants.RESTING_VERTICAL_ANGLE));
 
         // Shooter
         NamedCommands.registerCommand("PrepareFerry", CommandGenerators.PrepareFerry());
