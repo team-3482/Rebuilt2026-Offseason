@@ -4,18 +4,33 @@
 
 package frc.robot.intake;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 
-/** An example command that does nothing. */
+import static edu.wpi.first.units.Units.Degrees;
+
+/** A pivot command that pivots the intake to a given position. */
 public class PivotCommand extends Command {
     private double position;
     
+    /**
+     * Constructs a pivot command
+     * @param position - The angle in degrees
+     */
     public PivotCommand(double position) {
         setName("PivotCommand");
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(IntakeSubsystem.getInstance());
     
         this.position = position;
+    }
+
+    /**
+     * Constructs a pivot command
+     * @param position - The angle with the wrapper class {@link Angle}
+     */
+    public PivotCommand(Angle position) {
+        this(position.in(Degrees));
     }
 
     @Override

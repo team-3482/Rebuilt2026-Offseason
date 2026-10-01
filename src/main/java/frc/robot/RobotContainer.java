@@ -34,7 +34,6 @@ import frc.robot.swerve.SwerveTelemetry;
 import frc.robot.utilities.CommandGenerators;
 import frc.robot.vision.VisionSubsystem;
 import org.littletonrobotics.junction.Logger;
-import static edu.wpi.first.units.Units.Degrees;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -203,9 +202,9 @@ public class RobotContainer {
         // Left Bumper -> Spin Intake Roller
         this.operatorController.leftBumper()
             .whileTrue(Commands.parallel(
-                new PivotCommand(IntakeConstants.UPPER_ANGLE_LIMIT.in(Degrees)),
+                new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT),
                 new IntakeCommand()
-            )).onFalse(new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT.in(Degrees))
+            )).onFalse(new PivotCommand(IntakeConstants.RESTING_VERTICAL_ANGLE)
         );
 
         // Right Bumper -> Feed Fuel into Shooter
@@ -220,10 +219,10 @@ public class RobotContainer {
         // X -> Enter Climb
         this.operatorController.x().toggleOnTrue(new ClimbCommand());
 
-        // A -> Intake Rack and Pinion Out
-        this.operatorController.a().onTrue(new PivotCommand(IntakeConstants.UPPER_ANGLE_LIMIT.in(Degrees)));
-        // Y -> Intake Rack and Pinion In
-        this.operatorController.y().onTrue(new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT.in(Degrees)));
+        // A -> Intake Pivot Down
+        this.operatorController.a().onTrue(new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT));
+        // Y -> Intake Pivot Up
+        this.operatorController.y().onTrue(new PivotCommand(IntakeConstants.RESTING_VERTICAL_ANGLE));
     }
 
     private void registerNamedCommands() {
@@ -232,8 +231,8 @@ public class RobotContainer {
 
         // Intake
         NamedCommands.registerCommand("Intake", new IntakeCommand());
-        NamedCommands.registerCommand("MoveRackAndPinionOut", new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT.in(Degrees)));
-        NamedCommands.registerCommand("MoveRackAndPinionIn", new PivotCommand(IntakeConstants.UPPER_ANGLE_LIMIT.in(Degrees)));
+        NamedCommands.registerCommand("MoveRackAndPinionOut", new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT));
+        NamedCommands.registerCommand("MoveRackAndPinionIn", new PivotCommand(IntakeConstants.RESTING_VERTICAL_ANGLE));
 
         // Shooter
         NamedCommands.registerCommand("PrepareFerry", CommandGenerators.PrepareFerry());
