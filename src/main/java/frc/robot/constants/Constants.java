@@ -77,19 +77,22 @@ public class Constants {
 
     /** Constants for intake subsystem (both the pivot and actual intake) */
     public static final class IntakeConstants {
-        /** The CAN ID for the Left Pinion TalonFX */
-        public static final int LEFT_PINION_MOTOR = 22;
-        /** The CAN ID for the Right Pinion TalonFX */
-        public static final int RIGHT_PINION_MOTOR = 26;
+        /** The CAN ID for the Left Pivot TalonFX */
+        public static final int LEFT_PIVOT_MOTOR = 22;
+        /** The CAN ID for the Right Pivot TalonFX */
+        public static final int RIGHT_PIVOT_MOTOR = 26;
         /** The CAN ID for the Left Intake TalonFX */
         public static final int LEFT_INTAKE_MOTOR = 27;
             /** The CAN ID for the Right Intake TalonFX */
         public static final int RIGHT_INTAKE_MOTOR = 28;
 
+        // TODO: make sure these are the real angle values
         /** Minimum angle (On hardstop inside robot) */
-        public static final Angle MINIMUM_POSITION = Rotations.of(0);
+        public static final Angle LOWER_ANGLE_LIMIT = Degrees.of(90);
+        /** Resting vertical angle (Intaking position) */
+        public static final Angle RESTING_VERTICAL_ANGLE = Degrees.of(111);
         /** Maximum angle (Intaking position) */
-        public static final Angle MAXIMUM_POSITION = Rotations.of(3.125);
+        public static final Angle UPPER_ANGLE_LIMIT = Degrees.of(115);
 
         /** Gear ratio for mechanism */
         public static final double ROTOR_TO_MECHANISM_RATIO = ((double) 30 / 12) * ((double) 36 / 19);
@@ -103,16 +106,16 @@ public class Constants {
         @SuppressWarnings("HungarianNotationConstants")
         public static final class Slot0Gains {
             public static final double kG = 0;
-            public static final double kS = 0.22;
+            public static final double kS = 0;
             public static final double kV = 0;
             public static final double kA = 0;
-            public static final double kP = 32;
+            public static final double kP = 0;
             public static final double kI = 0;
             public static final double kD = 0;
         }
 
         /** The tolerance used for pivot in degrees */
-        public static final double PINION_TOLERANCE = 2;
+        public static final double PIVOT_TOLERANCE = 2;
 
         /** Speed to run the intake motor at */
         public static final double INTAKE_SPEED = 0.4;

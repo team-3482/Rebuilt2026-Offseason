@@ -25,7 +25,7 @@ import frc.robot.constants.TunerConstants;
 import frc.robot.hood.HoodSubsystem;
 import frc.robot.intake.IntakeCommand;
 import frc.robot.intake.IntakeSubsystem;
-import frc.robot.intake.MoveRackAndPinionCommand;
+import frc.robot.intake.PivotCommand;
 import frc.robot.shooter.FeedShooterCommand;
 import frc.robot.shooter.RevShooterCommand;
 import frc.robot.shooter.ShooterSubsystem;
@@ -34,6 +34,7 @@ import frc.robot.swerve.SwerveTelemetry;
 import frc.robot.utilities.CommandGenerators;
 import frc.robot.vision.VisionSubsystem;
 import org.littletonrobotics.junction.Logger;
+import static edu.wpi.first.units.Units.Degrees;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -202,9 +203,9 @@ public class RobotContainer {
         // Left Bumper -> Spin Intake Roller
         this.operatorController.leftBumper()
             .whileTrue(Commands.parallel(
-                new MoveRackAndPinionCommand(IntakeConstants.MAXIMUM_POSITION),
+                new PivotCommand(IntakeConstants.UPPER_ANGLE_LIMIT.in(Degrees)),
                 new IntakeCommand()
-            )).onFalse(new MoveRackAndPinionCommand(IntakeConstants.MINIMUM_POSITION)
+            )).onFalse(new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT.in(Degrees))
         );
 
         // Right Bumper -> Feed Fuel into Shooter
@@ -220,9 +221,9 @@ public class RobotContainer {
         this.operatorController.x().toggleOnTrue(new ClimbCommand());
 
         // A -> Intake Rack and Pinion Out
-        this.operatorController.a().onTrue(new MoveRackAndPinionCommand(IntakeConstants.MAXIMUM_POSITION));
+        this.operatorController.a().onTrue(new PivotCommand(IntakeConstants.UPPER_ANGLE_LIMIT.in(Degrees)));
         // Y -> Intake Rack and Pinion In
-        this.operatorController.y().onTrue(new MoveRackAndPinionCommand(IntakeConstants.MINIMUM_POSITION));
+        this.operatorController.y().onTrue(new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT.in(Degrees)));
     }
 
     private void registerNamedCommands() {
@@ -231,8 +232,8 @@ public class RobotContainer {
 
         // Intake
         NamedCommands.registerCommand("Intake", new IntakeCommand());
-        NamedCommands.registerCommand("MoveRackAndPinionOut", new MoveRackAndPinionCommand(IntakeConstants.MAXIMUM_POSITION));
-        NamedCommands.registerCommand("MoveRackAndPinionIn", new MoveRackAndPinionCommand(IntakeConstants.MINIMUM_POSITION));
+        NamedCommands.registerCommand("MoveRackAndPinionOut", new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT.in(Degrees)));
+        NamedCommands.registerCommand("MoveRackAndPinionIn", new PivotCommand(IntakeConstants.UPPER_ANGLE_LIMIT.in(Degrees)));
 
         // Shooter
         NamedCommands.registerCommand("PrepareFerry", CommandGenerators.PrepareFerry());
