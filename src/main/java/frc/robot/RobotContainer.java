@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.climb.ClimbCommand;
-import frc.robot.climb.ClimbSubsystem;
 import frc.robot.constants.Constants.DriverStationConstants;
 import frc.robot.constants.Constants.IntakeConstants;
 import frc.robot.constants.Constants.Positions;
@@ -78,7 +76,6 @@ public class RobotContainer {
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void initializeSubsystems() {
-        ClimbSubsystem.getInstance();
         HoodSubsystem.getInstance();
         IntakeSubsystem.getInstance();
         ShooterSubsystem.getInstance();
@@ -216,9 +213,6 @@ public class RobotContainer {
         // Left Trigger -> Manually rev Shooter (shouldn't be necessary other than for testing)
         this.operatorController.leftTrigger().whileTrue(new RevShooterCommand(Positions.BLUE_HUB));
 
-        // X -> Enter Climb
-        this.operatorController.x().toggleOnTrue(new ClimbCommand());
-
         // A -> Intake Pivot Down
         this.operatorController.a().onTrue(new PivotCommand(IntakeConstants.INTAKING_ANGLE));
         // Y -> Intake Pivot Up
@@ -226,9 +220,6 @@ public class RobotContainer {
     }
 
     private void registerNamedCommands() {
-        // Climb
-        NamedCommands.registerCommand("Climb", new ClimbCommand());
-
         // Intake
         NamedCommands.registerCommand("Intake", new IntakeCommand());
         NamedCommands.registerCommand("PivotToIntake", new PivotCommand(IntakeConstants.INTAKING_ANGLE));
