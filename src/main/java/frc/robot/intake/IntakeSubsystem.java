@@ -17,6 +17,8 @@ import edu.wpi.first.math.util.Units;
 
 import static edu.wpi.first.units.Units.Degrees;
 
+import org.littletonrobotics.junction.Logger;
+
 /** Controls Intake and Rack and Pinion */
 public class IntakeSubsystem extends SubsystemBase {
     // Use Bill Pugh Singleton Pattern for efficient lazy initialization (thread-safe !)
@@ -45,6 +47,12 @@ public class IntakeSubsystem extends SubsystemBase {
         
         this.rightIntakeMotor.setControl(new Follower(leftIntakeMotor.getDeviceID(), MotorAlignmentValue.Opposed));
         this.rightPivotMotor.setControl(new Follower(leftPivotMotor.getDeviceID(), MotorAlignmentValue.Opposed));
+    }
+
+    @Override
+    public void periodic() {
+        Logger.recordOutput("Intake/PivotAngle", getPosition());
+        System.out.println("Pivot Angle: " + getPosition());
     }
 
     /* Configures pinion motor since it is the only one using motion magic. */

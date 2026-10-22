@@ -87,15 +87,13 @@ public class Constants {
         public static final int RIGHT_INTAKE_MOTOR = 28;
 
         // TODO: make sure these are the real angle values
-        /** Minimum angle (On hardstop inside robot) */
+        /** Minimum angle (Intaking position) */
         public static final Angle LOWER_ANGLE_LIMIT = Degrees.of(90);
-        /** Resting vertical angle (Intaking position) */
-        public static final Angle RESTING_VERTICAL_ANGLE = Degrees.of(111);
-        /** Maximum angle (Intaking position) */
-        public static final Angle UPPER_ANGLE_LIMIT = Degrees.of(115);
+        /** Resting vertical angle (Stowed vertical position) */
+        public static final Angle RESTING_VERTICAL_ANGLE = Degrees.of(5);
 
         /** Gear ratio for mechanism */
-        public static final double ROTOR_TO_MECHANISM_RATIO = ((double) 30 / 12) * ((double) 36 / 19);
+        public static final double ROTOR_TO_MECHANISM_RATIO = 2;
 
         // TODO: we can probably optimize this a bit
         /* Motion Magic Config */
