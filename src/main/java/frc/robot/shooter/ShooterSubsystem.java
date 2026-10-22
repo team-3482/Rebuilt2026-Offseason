@@ -207,46 +207,46 @@ public class ShooterSubsystem extends SubsystemBase {
      * @param distance the distance from the target.
      * @return The desired/target shooter angular velocity.
      */
-    // public AngularVelocity calculateShooterAngularVelocity(Distance distance) {
-    //     double linearVelocity = calculateFuelLinearVelocity(distance).in(MetersPerSecond);
-    //     Logger.recordOutput("Shooter/FuelLinearVelocity", linearVelocity);
+    public AngularVelocity calculateShooterAngularVelocity(Distance distance) {
+        double linearVelocity = calculateFuelLinearVelocity(distance).in(MetersPerSecond);
+        Logger.recordOutput("Shooter/FuelLinearVelocity", linearVelocity);
 
-    //     return RadiansPerSecond.of(
-    //         (linearVelocity * 2)
-    //         / CalculationConstants.WHEEL_DIAMETER.in(Meters)
-    //     );
-    // }
+        return RadiansPerSecond.of(
+            (linearVelocity * 2) * CalculationConstants.GEAR_RATIO * CalculationConstants.OFFSET_MULTIPLIER
+            / CalculationConstants.WHEEL_DIAMETER.in(Meters)
+        );
+    }
 
     /**
      * Returns the target angular velocity for the shooter motors given the distance from a target.
      * @param distance the distance from the target.
      * @return The desired/target shooter angular velocity.
      */
-    public AngularVelocity calculateShooterAngularVelocity(Distance distance) {
-        double linearVelocity = calculateFuelLinearVelocity(distance).in(MetersPerSecond);
-        Logger.recordOutput("Shooter/FuelLinearVelocity", linearVelocity);
+    // public AngularVelocity calculateShooterAngularVelocity(Distance distance) {
+    //     double linearVelocity = calculateFuelLinearVelocity(distance).in(MetersPerSecond);
+    //     Logger.recordOutput("Shooter/FuelLinearVelocity", linearVelocity);
 
-        return RadiansPerSecond.of(
-            (linearVelocity * CalculationConstants.FUEL_LINEAR_TO_SHOOTER_ANGULAR_VELOCITY_RATIO)
-            * CalculationConstants.OFFSET_MULTIPLIER
-        );
-    }
+    //     return RadiansPerSecond.of(
+    //         (linearVelocity * CalculationConstants.FUEL_LINEAR_TO_SHOOTER_ANGULAR_VELOCITY_RATIO)
+    //         * CalculationConstants.OFFSET_MULTIPLIER
+    //     );
+    // }
 
     /**
      * Calculate the Linear Velocity of the shot fuel using a planetary gearbox formula.
      * @return The Linear Velocity.
      */
-    public LinearVelocity getFuelLinearVelocity(Distance distance) {
-        AngularVelocity currentVelocity = getShooterVelocity();
-        // use target number by default, but use real velocity once revved so it can correct the angle if necessary
-        AngularVelocity angularVelocity = (isShooterVelocityWithinTolerance() && currentVelocity.in(RotationsPerSecond) > 1)
-            ? currentVelocity
-            : calculateShooterAngularVelocity(distance);
+    // public LinearVelocity getFuelLinearVelocity(Distance distance) {
+    //     AngularVelocity currentVelocity = getShooterVelocity();
+    //     // use target number by default, but use real velocity once revved so it can correct the angle if necessary
+    //     AngularVelocity angularVelocity = (isShooterVelocityWithinTolerance() && currentVelocity.in(RotationsPerSecond) > 1)
+    //         ? currentVelocity
+    //         : calculateShooterAngularVelocity(distance);
 
-        return MetersPerSecond.of(
-            angularVelocity.in(RadiansPerSecond) * CalculationConstants.SHOOTER_ANGULAR_TO_FUEL_LINEAR_VELOCITY_RATIO
-        );
-    }
+    //     return MetersPerSecond.of(
+    //         angularVelocity.in(RadiansPerSecond) * CalculationConstants.SHOOTER_ANGULAR_TO_FUEL_LINEAR_VELOCITY_RATIO
+    //     );
+    // }
 
     /**
      * Set the lastTargetVelocity to a value
