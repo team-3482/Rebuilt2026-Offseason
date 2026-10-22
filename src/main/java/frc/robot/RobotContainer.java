@@ -202,7 +202,7 @@ public class RobotContainer {
         // Left Bumper -> Spin Intake Roller
         this.operatorController.leftBumper()
             .whileTrue(Commands.parallel(
-                new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT),
+                new PivotCommand(IntakeConstants.INTAKING_ANGLE),
                 new IntakeCommand()
             )).onFalse(new PivotCommand(IntakeConstants.RESTING_VERTICAL_ANGLE)
         );
@@ -220,7 +220,7 @@ public class RobotContainer {
         this.operatorController.x().toggleOnTrue(new ClimbCommand());
 
         // A -> Intake Pivot Down
-        this.operatorController.a().onTrue(new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT));
+        this.operatorController.a().onTrue(new PivotCommand(IntakeConstants.INTAKING_ANGLE));
         // Y -> Intake Pivot Up
         this.operatorController.y().onTrue(new PivotCommand(IntakeConstants.RESTING_VERTICAL_ANGLE));
     }
@@ -231,7 +231,7 @@ public class RobotContainer {
 
         // Intake
         NamedCommands.registerCommand("Intake", new IntakeCommand());
-        NamedCommands.registerCommand("PivotToIntake", new PivotCommand(IntakeConstants.LOWER_ANGLE_LIMIT));
+        NamedCommands.registerCommand("PivotToIntake", new PivotCommand(IntakeConstants.INTAKING_ANGLE));
         NamedCommands.registerCommand("PivotToRest", new PivotCommand(IntakeConstants.RESTING_VERTICAL_ANGLE));
 
         // Shooter

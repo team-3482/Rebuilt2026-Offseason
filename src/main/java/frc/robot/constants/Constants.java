@@ -88,8 +88,8 @@ public class Constants {
 
         // TODO: make sure these are the real angle values
         /** Minimum angle (Intaking position) */
-        public static final Angle LOWER_ANGLE_LIMIT = Degrees.of(90);
-        /** Resting vertical angle (Stowed vertical position) */
+        public static final Angle INTAKING_ANGLE = Degrees.of(90);
+        /** Resting vertical angle (Stowed vertical position, not on hardstop) */
         public static final Angle RESTING_VERTICAL_ANGLE = Degrees.of(5);
 
         /** Gear ratio for mechanism */

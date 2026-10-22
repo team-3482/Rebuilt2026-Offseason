@@ -70,7 +70,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         // Set Motion Magic gains in slot 0.
         Slot0Configs slot0Configs = configuration.Slot0;
-        slot0Configs.GravityType = GravityTypeValue.Elevator_Static;
+        slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
         slot0Configs.kG = IntakeConstants.Slot0Gains.kG;
         slot0Configs.kS = IntakeConstants.Slot0Gains.kS;
         slot0Configs.kV = IntakeConstants.Slot0Gains.kV;
@@ -100,7 +100,7 @@ public class IntakeSubsystem extends SubsystemBase {
       */
     public void motionMagicPosition(double position, boolean clamp) {
         if (clamp) {
-            position = MathUtil.clamp(position, IntakeConstants.LOWER_ANGLE_LIMIT.in(Degrees), IntakeConstants.UPPER_ANGLE_LIMIT.in(Degrees));
+            position = MathUtil.clamp(position, IntakeConstants.RESTING_VERTICAL_ANGLE.in(Degrees), IntakeConstants.INTAKING_ANGLE.in(Degrees));
         }
 
         MotionMagicVoltage control = motionMagicVoltage
