@@ -170,7 +170,7 @@ public class ShooterSubsystem extends SubsystemBase {
      * @param angle the angle of the shooter
      * @return the desired velocity of the fuel
      */
-    public static double calculateExitVelocity(
+    public static LinearVelocity calculateExitVelocity(
             Distance distanceX,
             Angle angle) {
 
@@ -189,7 +189,12 @@ public class ShooterSubsystem extends SubsystemBase {
             );
         }
 
-        return Math.sqrt((CalculationConstants.GRAV.in(MetersPerSecondPerSecond) * xInMeters * xInMeters) / denominator);
+        return MetersPerSecond.of(
+            Math.sqrt(
+                (CalculationConstants.GRAV.in(MetersPerSecondPerSecond) * xInMeters * xInMeters) 
+                / denominator
+                )
+            );
     }
 
     /**
@@ -197,7 +202,7 @@ public class ShooterSubsystem extends SubsystemBase {
      * @param distance distance from the target
      * @return the desired velocity of the fuel
      */
-    public static double calculateExitVelocity(Distance distance) {
+    public static LinearVelocity calculateExitVelocity(Distance distance) {
         return calculateExitVelocity(distance, CalculationConstants.SHOOTER_ANGLE);
     }
 
@@ -208,7 +213,7 @@ public class ShooterSubsystem extends SubsystemBase {
      * @return The desired/target shooter angular velocity.
      */
     public AngularVelocity calculateShooterAngularVelocity(Distance distance) {
-        double linearVelocity = calculateFuelLinearVelocity(distance).in(MetersPerSecond);
+        double linearVelocity = calculateExitVelocity(distance).in(MetersPerSecond);
         Logger.recordOutput("Shooter/FuelLinearVelocity", linearVelocity);
 
         return RadiansPerSecond.of(
