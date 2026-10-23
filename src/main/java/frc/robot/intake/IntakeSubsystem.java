@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants.IntakeConstants;
 import frc.robot.constants.Constants.RobotConstants;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static edu.wpi.first.units.Units.Degrees;
 
@@ -31,7 +32,6 @@ public class IntakeSubsystem extends SubsystemBase {
         return IntakeSubsystemHolder.INSTANCE;
     }
 
-    private final TalonFX leftPivotMotor = new TalonFX(IntakeConstants.LEFT_PIVOT_MOTOR, RobotConstants.CAN_BUS);
     private final TalonFX rightPivotMotor = new TalonFX(IntakeConstants.RIGHT_PIVOT_MOTOR, RobotConstants.CAN_BUS);
     private final TalonFX leftIntakeMotor = new TalonFX(IntakeConstants.LEFT_INTAKE_MOTOR, RobotConstants.CAN_BUS);
     private final TalonFX rightIntakeMotor = new TalonFX(IntakeConstants.RIGHT_INTAKE_MOTOR, RobotConstants.CAN_BUS);
@@ -43,16 +43,15 @@ public class IntakeSubsystem extends SubsystemBase {
         this.configureMotor();
         this.setPivotPosition(0);
 
-        this.leftPivotMotor.getPosition().setUpdateFrequency(50);
+        this.rightPivotMotor.getPosition().setUpdateFrequency(50);
         
         this.rightIntakeMotor.setControl(new Follower(leftIntakeMotor.getDeviceID(), MotorAlignmentValue.Opposed));
-        this.rightPivotMotor.setControl(new Follower(leftPivotMotor.getDeviceID(), MotorAlignmentValue.Opposed));
     }
 
     @Override
     public void periodic() {
         Logger.recordOutput("Intake/PivotAngle", getPosition());
-        System.out.println("Pivot Angle: " + getPosition());
+        SmartDashboard.putNumber("Intake/PivotAngle", getPosition());
     }
 
     /* Configures pinion motor since it is the only one using motion magic. */
@@ -84,8 +83,7 @@ public class IntakeSubsystem extends SubsystemBase {
         motionMagicConfigs.MotionMagicCruiseVelocity = IntakeConstants.CRUISE_SPEED;
         motionMagicConfigs.MotionMagicAcceleration = IntakeConstants.ACCELERATION;
 
-        // TODO: may be flipped
-        motorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+        motorOutputConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
         this.rightPivotMotor.getConfigurator().apply(configuration);
 
         motorOutputConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -107,7 +105,7 @@ public class IntakeSubsystem extends SubsystemBase {
             .withSlot(0)
             .withPosition(Units.degreesToRotations(position));
 
-        this.leftPivotMotor.setControl(control);
+        this.rightPivotMotor.setControl(control);
     }
 
     /**
@@ -125,7 +123,7 @@ public class IntakeSubsystem extends SubsystemBase {
      * @return The angle
      */
     public double getPosition() {
-        return Units.rotationsToDegrees(this.leftPivotMotor.getPosition().getValueAsDouble());
+        return Units.rotationsToDegrees(this.rightPivotMotor.getPosition().getValueAsDouble());
     }
 
     /**
@@ -143,7 +141,7 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public void setPivotPosition(double position) {
         position = Units.degreesToRotations(position);
-        this.leftPivotMotor.setPosition(position);
+        this.rightPivotMotor.setPosition(position);
     }
 
     /**

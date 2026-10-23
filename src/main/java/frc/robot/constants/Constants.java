@@ -77,10 +77,8 @@ public class Constants {
 
     /** Constants for intake subsystem (both the pivot and actual intake) */
     public static final class IntakeConstants {
-        /** The CAN ID for the Left Pivot TalonFX */
-        public static final int LEFT_PIVOT_MOTOR = 22;
         /** The CAN ID for the Right Pivot TalonFX */
-        public static final int RIGHT_PIVOT_MOTOR = 26;
+        public static final int RIGHT_PIVOT_MOTOR = 31;
         /** The CAN ID for the Left Intake TalonFX */
         public static final int LEFT_INTAKE_MOTOR = 27;
             /** The CAN ID for the Right Intake TalonFX */
@@ -88,26 +86,25 @@ public class Constants {
 
         // TODO: make sure these are the real angle values
         /** Minimum angle (Intaking position) */
-        public static final Angle INTAKING_ANGLE = Degrees.of(90);
+        public static final Angle INTAKING_ANGLE = Degrees.of(119.27);
         /** Resting vertical angle (Stowed vertical position, not on hardstop) */
-        public static final Angle RESTING_VERTICAL_ANGLE = Degrees.of(5);
+        public static final Angle RESTING_VERTICAL_ANGLE = Degrees.of(0);
 
         /** Gear ratio for mechanism */
-        public static final double ROTOR_TO_MECHANISM_RATIO = 2;
+        public static final double ROTOR_TO_MECHANISM_RATIO = 54;
 
-        // TODO: we can probably optimize this a bit
         /* Motion Magic Config */
-        public static final double CRUISE_SPEED = 4;
-        public static final double ACCELERATION = 8;
+        public static final double CRUISE_SPEED = 2;
+        public static final double ACCELERATION = 3;
 
         /** Gains used for Motion Magic slot 0. */
         @SuppressWarnings("HungarianNotationConstants")
         public static final class Slot0Gains {
-            public static final double kG = 0;
-            public static final double kS = 0;
+            public static final double kG = 0.02;
+            public static final double kS = 0.032;
             public static final double kV = 0;
             public static final double kA = 0;
-            public static final double kP = 0;
+            public static final double kP = 256;
             public static final double kI = 0;
             public static final double kD = 0;
         }
@@ -116,7 +113,7 @@ public class Constants {
         public static final double PIVOT_TOLERANCE = 2;
 
         /** Speed to run the intake motor at */
-        public static final double INTAKE_SPEED = 0.4;
+        public static final double INTAKE_SPEED = 0.55;
     }
 
     /** Constants for the Shooter subsystem */
@@ -183,16 +180,16 @@ public class Constants {
         public static final Distance WHEEL_DIAMETER = Inches.of(3.965);
         /** Fuel ball diameter */
         public static final Distance FUEL_DIAMETER = Inches.of(5.91);
-        /** Diameter of the hood (if it was a full circle) TODO: Is this the outside or the inside?*/
+        /** Diameter of the hood (if it was a full circle)*/
         // public static final Distance RING_DIAMETER = Inches.of(15.155);
-        /** Compressed fuel diameter/ Shooter Width TODO: Measure the actual diameter of the compressed fuel/width of shooter*/
+        /** Compressed fuel diameter/ Shooter Width */
         public static final Distance SHOOTER_WIDTH = Inches.of(5.796);
 
         /** Ratio of the diameter of the Ring to the diameter of the Wheel */
         public static final double GEAR_RATIO = 0.5;
         /** Ratio for converting Wheel angular velocity to Fuel angular velocity */
         // public static final double WHEEL_TO_FUEL_ANGULAR_VELOCITY_RATIO = 1 / GEAR_RATIO; // 0.2074
-        /** Radius of the path that the Fuel takes TODO: Check if ring diameter is the outside or inside - or +*/
+        /** Radius of the path that the Fuel takes*/
         // public static final Distance CARRIER_RADIUS = Inches.of((WHEEL_DIAMETER.in(Inches) / 2) - (SHOOTER_WIDTH.in(Inches) / 2)); // meter length
         /** Ratio for converting Motor angular velocity to Fuel linear velocity */
         // public static final double SHOOTER_ANGULAR_TO_FUEL_LINEAR_VELOCITY_RATIO = WHEEL_TO_FUEL_ANGULAR_VELOCITY_RATIO * CARRIER_RADIUS.in(Meters); // 0.026
